@@ -8,14 +8,16 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.3",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "spatie/laravel-permission": "3.13.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "3.0.x-dev",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3.1",
@@ -49,6 +51,20 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "docker:fix-permissions": [
+            "sudo chown -R $(whoami) ./app",
+            "sudo chown -R $(whoami) ./database",
+            "sudo chown -R $(whoami) ./tests"
+        ],
+        "docker:artisan": [
+            "docker-compose exec -T app php artisan"
+        ],
+        "docker:seed": [
+            "docker-compose exec -T app php artisan db:seed --class=PermissionTableSeeder"
+        ],
+        "docker:migrate": [
+            "docker-compose exec -T app php artisan migrate"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
