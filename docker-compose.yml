@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  app:
+    container_name: laravel-test-app
+    # fpm port 9000
+    image: php:7.4-fpm
+    volumes:
+      - "./:/app"
+      - "./storage:/app/storage"
+
+  nginx:
+    container_name: laravel-test-nginx
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - "./docker/nginx/app.conf:/etc/nginx/conf.d/default.conf"
+      - "./public:/app/public"
+    links:
+      - app
