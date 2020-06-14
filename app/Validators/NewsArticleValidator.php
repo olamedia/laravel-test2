@@ -17,7 +17,7 @@ final class NewsArticleValidator
     ];
 
     private $listRules = [
-        'page' => 'numeric',
+        'page' => 'numeric|min:1',
         'perPage' => 'numeric|max:100'
     ];
 

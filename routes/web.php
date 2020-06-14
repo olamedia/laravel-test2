@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/api/news/')->group(function () {
-    Route::get('/', 'NewsController@list');
-    Route::post('/add', 'NewsController@add');
-});
+// For testing access without roles
+Route::middleware('auth:api')
+    ->get('/user', function (Illuminate\Http\Request $request) {
+        return $request->user();
+    });
+
+Route::prefix('/api/news/')
+    ->group(function () {
+        Route::get('/', 'NewsController@list');
+        Route::post('/add', 'NewsController@add')
+            ->middleware('auth:api', 'role:Admin');
+    });

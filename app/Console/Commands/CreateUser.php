@@ -57,8 +57,8 @@ final class CreateUser extends Command
 
         try {
             $validatedData = $this->userValidator->validateCreate($data);
-            $this->userService->createUser($validatedData);
-            $this->info('User created successfuly');
+            $user = $this->userService->createUser($validatedData);
+            $this->info('User created successfuly. Token: ' . $user['api_token']);
         } catch (\Exception $exception) {
             $this->error('Exception: ' . $exception->getMessage());
         }

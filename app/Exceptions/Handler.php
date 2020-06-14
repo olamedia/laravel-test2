@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 final class Handler extends ExceptionHandler
@@ -38,7 +39,15 @@ final class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
-            return response()->json(['Unauthorized']);
+            return response()->json([
+                'errors' => [
+                    [
+                        'title' => 'Unauthorized',
+                        'status' => '403',
+                        'detail' => 'User don\'t have the permissions required.',
+                    ]
+                ]
+            ]);
         }
 
         return parent::render($request, $exception);
@@ -55,4 +64,24 @@ final class Handler extends ExceptionHandler
     {
         parent::report($exception);
     }
+//
+//    /**
+//     * Prepare a JSON response for the given exception.
+//     *
+//     * @param \Illuminate\Http\Request $request
+//     *
+//     * @return \Illuminate\Http\JsonResponse
+//     */
+//    protected function prepareJsonResponse($request, Throwable $e)
+//    {
+//        $data = $this->convertExceptionToArray($e);
+//        $status = $this->isHttpException($e) ? $e->getStatusCode() : 500;
+//
+//        return new JsonResponse(
+//            ['errors' => [$data]],
+//            $status,
+//            $this->isHttpException($e) ? $e->getHeaders() : [],
+//            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+//        );
+//    }
 }

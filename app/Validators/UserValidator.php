@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Validators;
 
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 final class UserValidator
 {
