@@ -56,7 +56,6 @@ final class AddUserRole extends Command
             $role = Role::query()->where(['name' => $roleName])->firstOrFail();
             $this->userService->assignUserRole($user, $role);
             $this->info('Role assigned successfuly');
-            \var_dump($user->roles->pluck('name','name')->all());
         }catch (\Exception $exception){
             $this->error('Exception: ' . $exception->getMessage());
         }

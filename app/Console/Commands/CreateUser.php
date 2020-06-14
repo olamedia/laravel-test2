@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Services\UserService;
+use App\Validators\UserValidator;
 use Illuminate\Console\Command;
 
 final class CreateUser extends Command
@@ -28,15 +29,21 @@ final class CreateUser extends Command
     private $userService;
 
     /**
+     * @var \App\Validators\UserValidator
+     */
+    private $userValidator;
+
+    /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, UserValidator $userValidator)
     {
         parent::__construct();
 
         $this->userService = $userService;
+        $this->userValidator = $userValidator;
     }
 
     /**
@@ -46,16 +53,11 @@ final class CreateUser extends Command
      */
     public function handle()
     {
-        $userName = $this->argument('name');
-        $userEmail = $this->argument('email');
-        $userPassword = $this->argument('password');
+        $data = $this->arguments();
 
         try {
-            $this->userService->createUser([
-                'name' => $userName,
-                'email' => $userEmail,
-                'password' => $userPassword
-            ]);
+            $validatedData = $this->userValidator->validateCreate($data);
+            $this->userService->createUser($validatedData);
             $this->info('User created successfuly');
         } catch (\Exception $exception) {
             $this->error('Exception: ' . $exception->getMessage());

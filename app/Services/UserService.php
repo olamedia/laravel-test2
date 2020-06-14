@@ -9,6 +9,8 @@ use Spatie\Permission\Models\Role;
 final class UserService
 {
     /**
+     * Assigns role to user.
+     *
      * @param \App\Services\Role $role
      */
     public function assignUserRole(User $user, Role $role)
@@ -16,6 +18,9 @@ final class UserService
         $user->assignRole($role);
     }
 
+    /**
+     * Creates user from data.
+     */
     public function createUser(array $data): User
     {
         if (isset($data['password'])) {
